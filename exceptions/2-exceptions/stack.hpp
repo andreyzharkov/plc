@@ -1,11 +1,11 @@
 #pragma once
 
-#include<iostream>
-#include<stack>
-#include<set>
-#include<string>
+#include <iostream>
+#include <stack>
+#include <set>
+#include <string>
 
-//count objects with no explicit name passed to constructor
+// counts objects with no explicit name passed to constructor
 int n_existed_objects = 0;
 
 class Object {
@@ -21,12 +21,16 @@ public:
 class StackManager {
 	int level = -1;
 	std::stack<std::set<Object*>> objects;
-
+	
 	bool is_unwinding = false;
 public:
 	void add_object(Object* obj);
 	void del_object(Object* obj);
+
 	void add_level();
+	// frees stack and
+	// returns previous level 
+	// (if level==0 before call, reduced to -1, and returns 0)
 	int sub_level();
 	int get_level() { return level; }
 };
@@ -48,7 +52,6 @@ Object::Object(std::string obj_id) : object_id(obj_id)
 
 Object::Object(const Object& obj)
 {
-	std::cout << "copied" << std::endl;
 	object_id = "cp" + obj.object_id;
 	stack_manager.add_object(this);
 	std::cout << "initialized object " << object_id << std::endl;

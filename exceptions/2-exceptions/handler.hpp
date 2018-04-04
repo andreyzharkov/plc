@@ -1,8 +1,9 @@
 #pragma once
 
-#include<setjmp.h>
-#include"stack.hpp"
+#include <setjmp.h>
+#include "stack.hpp"
 
+// exception types
 #define ERROR_1 1
 #define ERROR_2 2
 #define ERROR_3 3
@@ -11,16 +12,15 @@
 
 jmp_buf MY_EVENT[MAX_DEPTH];
 
+// last exception, -1 if no exception
 int EXCEPTION_CODE = -1;
-int value = 0;
-//StackManager stack_manager;
 
 #define TRY(body) \
-	value = 0; \
+	int jmp_value = 0; \
 	if (stack_manager.get_level() == MAX_DEPTH || EXCEPTION_CODE != -1) exit(1); \
 	stack_manager.add_level(); \
-	value = setjmp(MY_EVENT[stack_manager.get_level()]); \
-	if (value == 0 && EXCEPTION_CODE == -1) { \
+	jmp_value = setjmp(MY_EVENT[stack_manager.get_level()]); \
+	if (jmp_value == 0 && EXCEPTION_CODE == -1) { \
 		body; \
 	}
 
@@ -37,6 +37,6 @@ int value = 0;
 
 #define CATCH(exception_code, body) \
 	else if (EXCEPTION_CODE == exception_code) { \
-		body; \
 		EXCEPTION_CODE = -1; \
+        body; \
 	}
