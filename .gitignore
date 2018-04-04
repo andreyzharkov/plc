@@ -1,0 +1,8 @@
+Debug
+Release
+*.db
+*.vcxproj*
+*.sln
+*.VC.*
+*.suo
+*.vc*
