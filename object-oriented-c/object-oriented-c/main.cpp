@@ -1,23 +1,23 @@
 #include "oop.h"
 
-// базовый класс
+// Р±Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ
 VIRTUAL_CLASS(Base)
     int a;
 END_DEFINITION(Base)
 
-// класс-наследник
+// РєР»Р°СЃСЃ-РЅР°СЃР»РµРґРЅРёРє
 VIRTUAL_CLASS_DERIVED(Derived, Base)
     int b;
 END_DERIVED(Derived, Base)
 
 int main(){
-	// методы базового класса
+	// РјРµС‚РѕРґС‹ Р±Р°Р·РѕРІРѕРіРѕ РєР»Р°СЃСЃР°
 	DECLARE_METHOD(Base, Both, std::cout << "Base::Both" << std::endl;)
 	DECLARE_METHOD(Base, OnlyBase, std::cout << "Base::OnlyBase" << std::endl;)
 	
-	// инициализирует _vtable функциями родителя
+	// РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ _vtable С„СѓРЅРєС†РёСЏРјРё СЂРѕРґРёС‚РµР»СЏ
 	LEARN_FROM_BASE(Derived, Base)
-	// методы потомка
+	// РјРµС‚РѕРґС‹ РїРѕС‚РѕРјРєР°
 	DECLARE_METHOD(Derived, Both, std::cout << "Derived::Both" << std::endl;)
 	DECLARE_METHOD(Derived, OnlyDerived, std::cout << "Derived::OnlyDerived" << std::endl;)
 
@@ -26,11 +26,11 @@ int main(){
 	base.a = 0;
 	Derived derived;
 
-	// полиморфизм
+	// РїРѕР»РёРјРѕСЂС„РёР·Рј
 	Base* reallyDerived = reinterpret_cast<Base*>(&derived);
-	// без того что ниже полиморфизм тоже сработает
-	// но будут лишние функции
-	// в частности не выполнится последний ассерт
+	// Р±РµР· С‚РѕРіРѕ С‡С‚Рѕ РЅРёР¶Рµ РїРѕР»РёРјРѕСЂС„РёР·Рј С‚РѕР¶Рµ СЃСЂР°Р±РѕС‚Р°РµС‚
+	// РЅРѕ Р±СѓРґСѓС‚ Р»РёС€РЅРёРµ С„СѓРЅРєС†РёРё
+	// РІ С‡Р°СЃС‚РЅРѕСЃС‚Рё РЅРµ РІС‹РїРѕР»РЅРёС‚СЃСЏ РїРѕСЃР»РµРґРЅРёР№ Р°СЃСЃРµСЂС‚
 	auto it = (reallyDerived->vfuncs).begin();
 	while (it != (reallyDerived->vfuncs).end()) {
 		if ((reallyDerived->_vfuncs).find(it->first) == (reallyDerived->_vfuncs).end()) {
@@ -47,9 +47,9 @@ int main(){
 		}
 	}
 
-	VIRTUAL_CALL((&base), Both); // печатает “Base::Both a = 0”
-	VIRTUAL_CALL(reallyDerived, Both); // печатает “Derived::Both b = 1”
-	VIRTUAL_CALL(reallyDerived, OnlyBase);  // печатает “Base::OnlyBase”
+	VIRTUAL_CALL((&base), Both); // РїРµС‡Р°С‚Р°РµС‚ вЂњBase::Both a = 0вЂќ
+	VIRTUAL_CALL(reallyDerived, Both); // РїРµС‡Р°С‚Р°РµС‚ вЂњDerived::Both b = 1вЂќ
+	VIRTUAL_CALL(reallyDerived, OnlyBase);  // РїРµС‡Р°С‚Р°РµС‚ вЂњBase::OnlyBaseвЂќ
 	VIRTUAL_CALL(reallyDerived, OnlyDerived); // assert
 	return 0;
 }
