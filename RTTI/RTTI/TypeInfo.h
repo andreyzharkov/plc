@@ -32,7 +32,7 @@ static std::map<std::string, std::set< std::string > > baseClasses;
 static std::map<std::string, std::set< std::string > > derivedClasses;
 
 struct registrator {
-	registrator(std::string derived, std::string base, int offset)
+	registrator(std::string derived, std::string base)
 	{
 		if (baseClasses.find(derived) == baseClasses.end()) {
 			baseClasses[derived] = std::set<std::string>();
@@ -58,17 +58,17 @@ struct registrator {
 };
 
 #define NEW(B, T, o) new T();                             \
-TypeInfoForClasses[std::string(#o)] = TypeInfo(#T);
+typeInfoForClasses[std::string(#o)] = TypeInfo(#T);
 
 
 #define TYPEID(o) typeInfoForClasses[std::string(#o)]
 
 #define EXTENDS(Derived, Base) Derived : Base { \
-registrator r = registrator(#Derived, #Base, 0);
+registrator r = registrator(#Derived, #Base);
 
 #define MEXTENDS(Derived, Base1, Base2) Derived : Base1, Base2 { \
-registrator r1 = registrator(#Derived, #Base1, 0); \
-registrator r2 = registrator(#Derived, #Base2, sizeof(Base1) );
+registrator r1 = registrator(#Derived, #Base1); \
+registrator r2 = registrator(#Derived, #Base2);
 
 #define _EXIST(collection, element) collection.find(element) != collection.end()
 
