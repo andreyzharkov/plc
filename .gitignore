@@ -6,3 +6,6 @@ Release
 *.VC.*
 *.suo
 *.vc*
+.idea
+__pycache__
+*.pyc
