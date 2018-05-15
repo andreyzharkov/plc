@@ -25,6 +25,7 @@ int EXCEPTION_CODE = -1;
 	}
 
 #define THROW(exception) \
+    std::cout << "THROW EX:" << exception << ", EX_CODE:" << EXCEPTION_CODE << std::endl; \
 	if (EXCEPTION_CODE != -1 || stack_manager.get_level() < 0) { \
         if (EXCEPTION_CODE != -1) std::cerr << "Exception appeared while stack unwinding" << std::endl; \
         if (stack_manager.get_level() < 0) std::cerr << "Unhandled exception: " << exception << std::endl; \
@@ -40,3 +41,15 @@ int EXCEPTION_CODE = -1;
 		EXCEPTION_CODE = -1; \
         body; \
 	}
+
+#define END \
+    else { \
+        if (stack_manager.get_level() < 0) { \
+            std::cerr << "Unhandled exception:" << EXCEPTION_CODE << std::endl; \
+            std::cerr << "Aborting" << std::endl; \
+            system("pause"); \
+            exit(1); \
+		} else { \
+            longjmp(MY_EVENT[stack_manager.sub_level()], 1); \
+		} \
+    }

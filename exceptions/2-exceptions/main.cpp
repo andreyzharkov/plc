@@ -11,7 +11,7 @@ void f1(Object obj)
 void f2()
 {
 	Object obj_f2("f2_local");
-	f1(obj_f2);
+	//f1(obj_f2);
 }
 
 int main()
@@ -69,13 +69,13 @@ int main()
 	)*/
 
 	TRY(
-		/*Object o0;
+		Object o0;
 		TRY(
 			Object o1;
-		    THROW(ERROR_1)
+		    THROW(ERROR_3)
 		) CATCH(ERROR_1,
 			std::cout << "caught " << ERROR_1 << std::endl;
-		)*/
+		) END
 		Object o2;
 		{
 			Object o3; Object o4; f2();
@@ -83,8 +83,8 @@ int main()
 		Object o5;
 	) CATCH(ERROR_1, 
 		std::cout << "caught " << ERROR_1 << std::endl
-	) CATCH(ERROR_2,
-		std::cout << "caught " << ERROR_1 << std::endl
-	)
+	) CATCH(ERROR_3,
+		std::cout << "caught " << ERROR_3 << std::endl
+	) END
 	return 0;
 }
