@@ -68,9 +68,15 @@ struct MEXTENDS(Derived, DerivedA, DerivedB)
     int b;
 };
 
+class AAA {
+};
+
 int main()
 {
 	DerivedB *d = NEW(DerivedB, Derived, d);
+
+	DYNAMIC_CAST(DerivedB, DerivedA, d)->printType(); // Derived (function is virtual)
+	DYNAMIC_CAST(DerivedB, DerivedA, d)->printCurrentType(); // DerivedA
 	
 	Base *a = NEW(Base, DerivedB, a);
 	Base *b = NEW(Base, Base, b);
@@ -116,8 +122,8 @@ int main()
 	static_cast<DerivedA*>(dd)->printCurrentType();
 
 	// nullptr
-	DerivedA* n1 = DYNAMIC_CAST(DerivedB, DerivedA, d);
-	std::cout << n1 << std::endl;
+	AAA* n1 = DYNAMIC_CAST(DerivedB, AAA, d);
+	std::cout << n1;
 	
 	return 0;
 }

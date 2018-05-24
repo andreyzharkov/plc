@@ -72,6 +72,14 @@ registrator r2 = registrator(#Derived, #Base2);
 
 #define _EXIST(collection, element) collection.find(element) != collection.end()
 
+inline bool haveCommonDescendant(const std::string& A, const std::string& B)
+{
+	for (auto d : derivedClasses[A]) {
+		if (_EXIST(derivedClasses[B], d)) return true;
+	}
+	return false;
+}
+
 #define DYNAMIC_CAST(R, T, a) \
-((_EXIST(baseClasses[#R], #T) || _EXIST(derivedClasses[#R], #T)) ? \
-reinterpret_cast<T*>(reinterpret_cast<R*>(a)) : static_cast<T*>(nullptr))
+((_EXIST(baseClasses[#R], #T) || _EXIST(derivedClasses[#R], #T) || haveCommonDescendant(#R, #T)) ? \
+reinterpret_cast<T*>(reinterpret_cast<T*>(a)) : static_cast<T*>(nullptr))
