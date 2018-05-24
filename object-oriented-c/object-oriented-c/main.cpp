@@ -27,26 +27,9 @@ int main(){
 	Derived derived;
 
 	// полиморфизм
-	Base* reallyDerived = reinterpret_cast<Base*>(&derived);
-	// без того что ниже полиморфизм тоже сработает
-	// но будут лишние функции
-	// в частности не выполнится последний ассерт
-	auto it = (reallyDerived->vfuncs).begin();
-	while (it != (reallyDerived->vfuncs).end()) {
-		if ((reallyDerived->_vfuncs).find(it->first) == (reallyDerived->_vfuncs).end()) {
-			auto toerase = it;
-			++it;
-			(reallyDerived->vfuncs).erase(toerase);
-		} else {
-			++it;
-		}
-	}
-	for (auto it : reallyDerived->_vfuncs) {
-		if ((reallyDerived->vfuncs).find(it.first) == (reallyDerived->vfuncs).end()) {
-			(reallyDerived->vfuncs).insert(it);
-		}
-	}
+	CAST(Base, &derived, reallyDerived);
 
+	VIRTUAL_CALL((&derived), OnlyDerived); // "Devived::OnlyDerived"
 	VIRTUAL_CALL((&base), Both); // печатает “Base::Both a = 0”
 	VIRTUAL_CALL(reallyDerived, Both); // печатает “Derived::Both b = 1”
 	VIRTUAL_CALL(reallyDerived, OnlyBase);  // печатает “Base::OnlyBase”
